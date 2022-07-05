@@ -10,4 +10,7 @@
 ### RUS
 **TоrSreen — бот для безопасной проверки `TOR`-линков в телеграм, чтобы тебя не `трахнули` при переходе на ссылку в Тор, использует технологии `python + aiogram + selenium`.**
 
+### Community
+![Горизонт событий](https://t.me/+GluQGGiKV95mZGYy)
+
 ![](https://github.com/Apanazar/stuprum/blob/master/onion.jpg)
