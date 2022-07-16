@@ -2,7 +2,7 @@ import logging
 import time
 import os
 
-from misstake import check
+from misstake import extract_link
 from aiogram import Bot, Dispatcher, executor, types
 from config import TOKEN
 from screen import take_screen, driver, TimeoutException, WebDriverException
@@ -27,39 +27,37 @@ async def start(message: types.Message):
 
 @dp.message_handler(content_types=['text'])
 async def hadle_urls(message: types.Message):
-    link = check(message.text)
-    if link == 0:
-        pass
-    else:
-         start_time = time.time()
-         try:
-             msg_request = await message.answer('Request has been sent.\n'
-                                                'Please wait'
-                                                )
-             screen_site = take_screen(link[0])
-             await msg_request.delete()
-             await bot.send_photo(chat_id=message.chat.id,
-                                  photo=open(screen_site, 'rb'),
-                                  caption="According to your request: {0}\nRequest time: {1} sec."
-                                  .format(link[0],round(time.time() - start_time))
-                                  )
-             if os.path.exists(screen_site):
-                 os.remove(screen_site)
-                 
-         except TimeoutException:
-             await msg_request.delete()
-             await message.answer('Timed out waiting for a response from the resource.')
-             await message.answer_sticker(r'CAACAgIAAxkBAAEE9exio5aFSonquBgqJPOyiXrQIKCz0AACEAADcPcaMRgljWVLMdIYJAQ')
-         
-         except WebDriverException:
-             await msg_request.delete()
-             await message.answer('No access to resource.')
-             await message.answer_sticker(r'CAACAgIAAxkBAAEE9exio5aFSonquBgqJPOyiXrQIKCz0AACEAADcPcaMRgljWVLMdIYJAQ')
-         
-         except:
-             await msg_request.delete()
-             await message.answer('An unexpected error occurred, please try again later.')
-             await message.answer_sticker(r'CAACAgIAAxkBAAEE9e5io5aKhuAAAb-06NcvyF765gZdNQsAAo0MAAKp9tBLixqlJA7vLZckBA')
+    link = extract_link(message.text)
+    if link != 0: # link exist in message
+       start_time = time.time()
+       try:
+           msg_request = await message.answer('Request has been sent.\n'
+                                              'Please wait'
+                                              )
+           screen_site = take_screen(link[0])
+           await msg_request.delete()
+           await bot.send_photo(chat_id=message.chat.id,
+                                photo=open(screen_site, 'rb'),
+                                caption="According to your request: {0}\nRequest time: {1} sec."
+                                .format(link[0],round(time.time() - start_time))
+                                )
+           if os.path.exists(screen_site):
+               os.remove(screen_site)
+               
+       except TimeoutException:
+           await msg_request.delete()
+           await message.answer('Timed out waiting for a response from the resource.')
+           await message.answer_sticker(r'CAACAgIAAxkBAAEE9exio5aFSonquBgqJPOyiXrQIKCz0AACEAADcPcaMRgljWVLMdIYJAQ')
+       
+       except WebDriverException:
+           await msg_request.delete()
+           await message.answer('No access to resource.')
+           await message.answer_sticker(r'CAACAgIAAxkBAAEE9exio5aFSonquBgqJPOyiXrQIKCz0AACEAADcPcaMRgljWVLMdIYJAQ')
+       
+       except:
+           await msg_request.delete()
+           await message.answer('An unexpected error occurred, please try again later.')
+           await message.answer_sticker(r'CAACAgIAAxkBAAEE9e5io5aKhuAAAb-06NcvyF765gZdNQsAAo0MAAKp9tBLixqlJA7vLZckBA')
 
 if __name__ == '__main__':
     try:
