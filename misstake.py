@@ -1,12 +1,9 @@
 import re 
-import find
 
-def extract_links(text):
+def extract_link(text):
     links = text.split()
     for link in links:
-        link = re.findall(r'http(?:s)?://\S+', link)
+        link = re.findall(r'^http(?:s)?:\/\/[A-Za-z0-9]{56}\.onion\S+', link)
         if link != []:
-            if ".onion" in link: # TOR link ?
-                if len(link) > 56: # v3 link ?
-                    return link
+            return link
     return 0
