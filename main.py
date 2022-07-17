@@ -2,7 +2,7 @@ import logging
 import time
 import os
 
-from misstake import extract_link
+import misstake 
 from aiogram import Bot, Dispatcher, executor, types
 from config import TOKEN
 from screen import take_screen, driver, TimeoutException, WebDriverException
@@ -27,8 +27,8 @@ async def start(message: types.Message):
 
 @dp.message_handler(content_types=['text'])
 async def hadle_urls(message: types.Message):
-    link = extract_link(message.text)
-    if link != 0: # link exist in message
+    link = misstake.extract_link(message.text)
+    if link != 0:
        start_time = time.time()
        try:
            msg_request = await message.answer('Request has been sent.\n'
