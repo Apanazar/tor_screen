@@ -1,12 +1,12 @@
 import re 
 import find
 
-def check(urls):
-    link = urls.split()
-    for words in link:
-        words = re.findall(r'http(?:s)?://\S+', words)
-        if words != []:
-            return words
-        else:
-            continue
+def extract_links(text):
+    links = text.split()
+    for link in links:
+        link = re.findall(r'http(?:s)?://\S+', link)
+        if link != []:
+            if ".onion" in link: # TOR link ?
+                if len(link) > 56: # v3 link ?
+                    return link
     return 0
