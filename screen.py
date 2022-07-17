@@ -1,6 +1,8 @@
 import os
 import random
 
+from config import proxy_addr, proxy_port, geckodriver_path
+
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.common.exceptions import TimeoutException, WebDriverException
@@ -10,11 +12,11 @@ options = Options()
 options.headless = True
 fp = webdriver.FirefoxProfile()
 fp.set_preference('network.proxy.type', 1)
-fp.set_preference('network.proxy.socks', '127.0.0.1')
-fp.set_preference('network.proxy.socks_port', 9050)
+fp.set_preference('network.proxy.socks', proxy_addr)
+fp.set_preference('network.proxy.socks_port', proxy_port)
 fp.set_preference('network.proxy.socks_remote_dns', True)
 
-driver = webdriver.Firefox(executable_path='path_to_driver',
+driver = webdriver.Firefox(executable_path=geckodriver_path,
                            options=options,
                            firefox_profile=fp)
 
